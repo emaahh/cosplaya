@@ -29,6 +29,9 @@ export default function Home() {
 
     const updateLoggedStatus = (status) => {
         setLogged(status);
+        if(status && pb.authStore.model){
+            setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
+        }
     };
 
 
