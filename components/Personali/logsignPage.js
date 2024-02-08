@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/components/ui/use-toast"
 
+import { LoaderIcon } from "lucide-react"
+
 
 import Fade from '@mui/material/Fade';
 
@@ -24,6 +26,8 @@ export default function LogSignPage({ updateLoggedStatus }) {
     const [pageLogin, setPageLogin] = useState(true)
     const [pageRegister, setPageRegister] = useState(false)
 
+    const [loading, setLoading] = useState(false)
+
     const [logged, setLogged] = useState(pb.authStore.isValid)
     const [formData, setFormData] = useState({username: '', email: '', password: ''});
 
@@ -39,16 +43,17 @@ export default function LogSignPage({ updateLoggedStatus }) {
     const cambiaForm = (formScelto) => {
         if(formScelto == 0){
             setPageLogin(false)
-            const myTimeout = setTimeout(()=>{setPageRegister(true)}, 100);
+            const myTimeout = setTimeout(()=>{setPageRegister(true)}, 200);
         }else{
             setPageRegister(false)
-            const myTimeout = setTimeout(()=>{setPageLogin(true)}, 100);
+            const myTimeout = setTimeout(()=>{setPageLogin(true)}, 200);
         }
         setFormData({username: '', email: '', password: ''})
     }
 
     const tastoLogin = async (e) => {
         e.preventDefault();
+        setLoading(true)
         try {
             const authData = await pb.collection('users').authWithPassword(formData.email, formData.password);
             updateLoggedStatus(pb.authStore.isValid);
@@ -59,11 +64,13 @@ export default function LogSignPage({ updateLoggedStatus }) {
                 description: "Prova a rivedere l'e-mail o la password",
                 variant: "destructive"
             })
+            setLoading(false)
         }
     };
 
     const tastoRegistrazione = async (e) => {
         e.preventDefault();
+        setLoading(true)
         const data = {
             "username": formData.username,
             "email": formData.email,
@@ -76,6 +83,7 @@ export default function LogSignPage({ updateLoggedStatus }) {
         const authData = await pb.collection('users').authWithPassword(formData.email, formData.password);
         updateLoggedStatus(pb.authStore.isValid);
         setLogged(pb.authStore.isValid)
+        setLoading(false)
     };
     
 
@@ -106,7 +114,7 @@ export default function LogSignPage({ updateLoggedStatus }) {
                             </div>
                             <br/>
                             <div className="space-y-2">
-                                <Button className="w-full" type="submit">Login</Button>
+                                <Button className="w-full" type="submit">{loading? <LoaderIcon className="animate-spin"/> : <>Login</>}</Button>
                             </div>
                             <Separator className="my-4"/>
                             <div className="space-y-2">
@@ -146,7 +154,7 @@ export default function LogSignPage({ updateLoggedStatus }) {
                             </div>
                             <br/>
                             <div className="space-y-2">
-                                <Button className="w-full" type="submit">Registrati</Button>
+                                <Button className="w-full" type="submit">{loading? <LoaderIcon className="animate-spin"/> : <>Registrati</>}</Button>
                             </div>
                             <Separator className="my-4"/>
                             <div className="space-y-2">
