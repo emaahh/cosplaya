@@ -26,6 +26,7 @@ export default function Home() {
     const { toast } = useToast()
 
     const [logged, setLogged] = useState(pb.authStore.isValid);
+    const [userModel, setUserModel] = useState(userModel)
 
     const updateLoggedStatus = (status) => {
         setLogged(status);
@@ -37,21 +38,21 @@ export default function Home() {
         setLogged(pb.authStore.isValid)
     }
 
-    const [avatar, setAvatar] = useState("https://cosplaya.pockethost.io/api/files/users/"+pb.authStore.model.id+"/"+pb.authStore.model.avatar);
+    const [avatar, setAvatar] = useState("https://cosplaya.pockethost.io/api/files/users/"+userModel.id+"/"+userModel.avatar);
     const handleAvatarChange = async (e) => {
         if (e.target.files) {
             console.log("preso in carico")
             setAvatar(e.target.files[0]);
             try {
-                const record = await pb.collection('users').update(pb.authStore.model.id, {avatar: e.target.files[0],});
-                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+pb.authStore.model.id+"/"+pb.authStore.model.avatar)
+                const record = await pb.collection('users').update(userModel.id, {avatar: e.target.files[0],});
+                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+userModel.id+"/"+userModel.avatar)
             } catch (error) {
                 toast({
                     title: "Errore nel caricamento dell'avatar",
                     description: "Riprova, se il problema persiste assicurati si tratti di un formato supportato e che non superi i 5MB o contattaci",
                     variant: "destructive"
                 })
-                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+pb.authStore.model.id+"/"+pb.authStore.model.avatar)
+                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+userModel.id+"/"+userModel.avatar)
             }
         }
     }
@@ -80,7 +81,7 @@ export default function Home() {
                                     
                                     <br/>
 
-                                <CardTitle className="text-lg sm:text-2xl">Ciao {pb.authStore.model.username}!</CardTitle>
+                                <CardTitle className="text-lg sm:text-2xl">Ciao {userModel.username}!</CardTitle>
                                 <CardDescription>Qui potrai modificare il tuo profilo per adattarlo al tuo stile.</CardDescription>
 
                             </CardHeader>
