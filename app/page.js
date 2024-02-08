@@ -26,10 +26,11 @@ export default function Home() {
     const { toast } = useToast()
 
     const [logged, setLogged] = useState(pb.authStore.isValid);
-    const [userModel, setUserModel] = useState(userModel)
+    const [userModel, setUserModel] = useState(pb.authStore.model)
 
     const updateLoggedStatus = (status) => {
         setLogged(status);
+        setUserModel(pb.authStore.model)
     };
 
 
