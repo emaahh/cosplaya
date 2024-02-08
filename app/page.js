@@ -38,21 +38,21 @@ export default function Home() {
         setLogged(pb.authStore.isValid)
     }
 
-    const [avatar, setAvatar] = useState("https://cosplaya.pockethost.io/api/files/users/"+userModel.id+"/"+userModel.avatar);
+    const [avatar, setAvatar] = useState("https://cosplaya.pockethost.io/api/files/users/"+userModel? userModel.id : null+"/"+userModel.avatar);
     const handleAvatarChange = async (e) => {
         if (e.target.files) {
             console.log("preso in carico")
             setAvatar(e.target.files[0]);
             try {
-                const record = await pb.collection('users').update(userModel.id, {avatar: e.target.files[0],});
-                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+userModel.id+"/"+userModel.avatar)
+                const record = await pb.collection('users').update(userModel? userModel.id : null, {avatar: e.target.files[0],});
+                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+userModel? userModel.id : null+"/"+userModel.avatar)
             } catch (error) {
                 toast({
                     title: "Errore nel caricamento dell'avatar",
                     description: "Riprova, se il problema persiste assicurati si tratti di un formato supportato e che non superi i 5MB o contattaci",
                     variant: "destructive"
                 })
-                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+userModel.id+"/"+userModel.avatar)
+                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+userModel? userModel.id : null+"/"+userModel.avatar)
             }
         }
     }
