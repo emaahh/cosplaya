@@ -26,11 +26,9 @@ export default function Home() {
     const { toast } = useToast()
 
     const [logged, setLogged] = useState(pb.authStore.isValid);
-    const [userModel, setUserModel] = useState(pb.authStore.model)
 
     const updateLoggedStatus = (status) => {
         setLogged(status);
-        setUserModel(pb.authStore.model)
     };
 
 
@@ -39,21 +37,26 @@ export default function Home() {
         setLogged(pb.authStore.isValid)
     }
 
-    const [avatar, setAvatar] = useState("https://cosplaya.pockethost.io/api/files/users/"+userModel? userModel.id : null+"/"+userModel.avatar);
+    const [avatar, setAvatar] = useState();
+    useEffect(() => {
+        if (pb.authStore.model) {
+            setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
+        }
+    }, []);
     const handleAvatarChange = async (e) => {
         if (e.target.files) {
             console.log("preso in carico")
             setAvatar(e.target.files[0]);
             try {
-                const record = await pb.collection('users').update(userModel? userModel.id : null, {avatar: e.target.files[0],});
-                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+userModel? userModel.id : null+"/"+userModel.avatar)
+                const record = await pb.collection('users').update(pb.authStore.model.id, {avatar: e.target.files[0],});
+                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+pb.authStore.model.id+"/"+pb.authStore.model.avatar)
             } catch (error) {
                 toast({
                     title: "Errore nel caricamento dell'avatar",
                     description: "Riprova, se il problema persiste assicurati si tratti di un formato supportato e che non superi i 5MB o contattaci",
                     variant: "destructive"
                 })
-                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+userModel? userModel.id : null+"/"+userModel.avatar)
+                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+pb.authStore.model.id+"/"+pb.authStore.model.avatar)
             }
         }
     }
@@ -82,7 +85,7 @@ export default function Home() {
                                     
                                     <br/>
 
-                                <CardTitle className="text-lg sm:text-2xl">Ciao {userModel.username}!</CardTitle>
+                                <CardTitle className="text-lg sm:text-2xl">Ciao {pb.authStore.model.username}!</CardTitle>
                                 <CardDescription>Qui potrai modificare il tuo profilo per adattarlo al tuo stile.</CardDescription>
 
                             </CardHeader>
