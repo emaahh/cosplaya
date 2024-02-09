@@ -27,6 +27,7 @@ export default function Home() {
 
     const [logged, setLogged] = useState(pb.authStore.isValid);
 
+
     const updateLoggedStatus = (status) => {
         setLogged(status);
         if(status && pb.authStore.model){
@@ -93,7 +94,7 @@ export default function Home() {
 
                             </CardHeader>
                             <CardContent>
-                                <p>fase: test(ver.0.0.1) made by <a className="underline" target="_blank" href="https://instagram.com/_emaahh_">emaahh</a></p>
+                                <p>contenuti boh da aggiungere</p>
                             </CardContent>
 
                             <CardFooter>

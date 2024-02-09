@@ -4,7 +4,7 @@ import localFont from 'next/font/local'
 
 import { Toaster } from "@/components/ui/toaster"
 
-
+import Footer from '@/components/Personali/footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,6 +21,8 @@ export const viewport = {
 }
 
 export default function RootLayout({ children }) {
+
+
 	return (
 		<html lang="it">
 			<body className={inter.className}>
@@ -32,6 +34,7 @@ export default function RootLayout({ children }) {
 				</div>
 				{children}
 				<Toaster />
+				<Footer/>
 			</body>
 		</html>
 	)
