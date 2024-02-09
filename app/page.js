@@ -47,23 +47,7 @@ export default function Home() {
             setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
         }
     }, []);
-    const handleAvatarChange = async (e) => {
-        if (e.target.files) {
-            console.log("preso in carico")
-            setAvatar(e.target.files[0]);
-            try {
-                const record = await pb.collection('users').update(pb.authStore.model.id, {avatar: e.target.files[0],});
-                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+pb.authStore.model.id+"/"+pb.authStore.model.avatar)
-            } catch (error) {
-                toast({
-                    title: "Errore nel caricamento dell'avatar",
-                    description: "Riprova, se il problema persiste assicurati si tratti di un formato supportato e che non superi i 5MB o contattaci",
-                    variant: "destructive"
-                })
-                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+pb.authStore.model.id+"/"+pb.authStore.model.avatar)
-            }
-        }
-    }
+    
     
 
     return (
@@ -71,38 +55,7 @@ export default function Home() {
             
             {
                 logged?
-                    <div className="container">
-                        <h1 className="text-xl font-bold">Il tuo profilo</h1>
-
-                        <Card className="flex justify-center items-center flex-col">
-                            <CardHeader className="items-center">
-
-                                <Avatar className="w-20 h-20 flex items-center aspect-auto">
-                                    <AvatarImage src={avatar} className="w-auto h-auto aspect-auto"/>
-                                    <AvatarFallback><LoaderIcon className="animate-spin"/></AvatarFallback>
-                                </Avatar>
-                                
-                                    <Button className="border-dashed" variant="outline">
-                                        <input className="hidden" id="file-upload" type="file" onChange={handleAvatarChange}/>
-                                        <label htmlFor="file-upload" className="inline-flex items-center"><Upload className="p-1"/> Cambia avatar</label>
-                                    </Button>
-                                    
-                                    <br/>
-
-                                <CardTitle className="text-lg sm:text-2xl">Ciao {pb.authStore.model.username}!</CardTitle>
-                                <CardDescription>Qui potrai modificare il tuo profilo per adattarlo al tuo stile.</CardDescription>
-
-                            </CardHeader>
-                            <CardContent>
-                                <p>contenuti boh da aggiungere</p>
-                            </CardContent>
-
-                            <CardFooter>
-                                <Button onClick={logout} variant="destructive">Esci dal profilo</Button>
-                            </CardFooter>
-
-                        </Card>
-                    </div>
+                    <h1>Loggato come: {pb.authStore.model.username}</h1>
                 :
                     <LogSignPage updateLoggedStatus={updateLoggedStatus}/>
             }
