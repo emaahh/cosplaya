@@ -55,7 +55,7 @@ export default function Home() {
         <div style={{backgroundColor: chroma(colore).brighten(2.5)}}>
             <h1>HOME</h1>
             
-            <h1>Loggato come: {pb.authStore.model.username}</h1>
+            <h1>Loggato come: {pb.authStore.model? pb.authStore.model.username : null}</h1>
 
             <p style={{color: adjustColor}}>Ciao</p>
             <br/>
