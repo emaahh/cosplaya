@@ -31,7 +31,6 @@ export default function AccountPage({ params }) {
 
     const logout = () => {
         pb.authStore.clear()
-        setLogged(false)
         router.push('/account/loginregister')
     }
 
