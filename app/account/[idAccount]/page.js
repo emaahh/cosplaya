@@ -31,7 +31,7 @@ export default function AccountPage({ params }) {
 
     const logout = () => {
         pb.authStore.clear()
-        router.push('/account/loginregister')
+
     }
 
     const findAccount = async () => {
@@ -111,7 +111,7 @@ export default function AccountPage({ params }) {
                                                     <AvatarImage src={avatar} className="w-auto h-auto aspect-auto"/>
                                                     <AvatarFallback><LoaderIcon className="animate-spin"/></AvatarFallback>
                                                 </Avatar>
-                                                <Button className="border-dashed" variant="outline">
+                                                <Button className="border-dashed" variant="outline" adjustColor={'white'}>
                                                     <input className="hidden" id="file-upload" type="file" onChange={handleAvatarChange}/>
                                                     <label htmlFor="file-upload" className="inline-flex items-center"><Upload className="p-1"/> Cambia avatar</label>
                                                 </Button>
