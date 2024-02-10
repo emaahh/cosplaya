@@ -138,7 +138,7 @@ export default function AccountPage({ params }) {
                             {
                                 isMine?
                                     <CardFooter>
-                                        <Button onClick={logout} variant="destructive">Esci dal profilo</Button>
+                                        <Button onClick={logout} adjustColor={'red'}>Esci dal profilo</Button>
                                     </CardFooter>
                                 :
                                     null
