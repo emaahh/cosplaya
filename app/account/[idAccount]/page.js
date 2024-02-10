@@ -31,7 +31,7 @@ export default function AccountPage({ params }) {
 
     const logout = () => {
         pb.authStore.clear()
-
+        router.push('/account/loginregister')
     }
 
     const findAccount = async () => {

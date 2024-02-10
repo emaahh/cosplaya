@@ -85,7 +85,7 @@ export default function Navbar() {
                                                 <AvatarFallback><LoaderIcon className="animate-spin"/></AvatarFallback>
                                             </Avatar>
                                             
-                                            <CardTitle className="text-lg sm:text-2xl">{pb.authStore.model.username}</CardTitle>
+                                            <CardTitle className="text-lg sm:text-2xl">{pb.authStore.model? pb.authStore.model.username: null}</CardTitle>
 
                                         </CardHeader>
 
