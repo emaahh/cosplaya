@@ -80,3 +80,6 @@
   src: local("Huglove"),
     url("../public/font/Huglove.ttf") format("truetype");
 }
+.title{
+  font-family:'huglove'
+}

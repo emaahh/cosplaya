@@ -10,9 +10,12 @@ import { Upload } from 'lucide-react';
 import { LoaderIcon } from "lucide-react"
 
 
-import LogSignPage from "../components/Personali/logsignPage"
-
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+
+import chroma from "chroma-js"
+import { Colorful } from '@uiw/react-color';
+
 
 import { useState, useEffect } from 'react';
 
@@ -22,43 +25,50 @@ const pb = new PocketBase('https://cosplaya.pockethost.io');
 
 
 export default function Home() {
+    const router = useRouter()
+
 
     const { toast } = useToast()
 
     const [logged, setLogged] = useState(pb.authStore.isValid);
+    const [colore, setColore] = useState('#000')
 
-
-    const updateLoggedStatus = (status) => {
-        setLogged(status);
-        if(status && pb.authStore.model){
-            setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
-        }
-    };
-
-
-    const logout = () => {
-        pb.authStore.clear()
-        setLogged(pb.authStore.isValid)
-    }
+    const adjustColor = chroma(colore).luminance() < 0.025? chroma(colore).brighten(4) : chroma(colore).darken()
 
     const [avatar, setAvatar] = useState();
     useEffect(() => {
+        if(!logged){
+            router.push('/account/loginregister')
+        }
         if (pb.authStore.model) {
-            setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
+            if(pb.authStore.model.avatar) {
+                setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
+            }else{
+                setAvatar('https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png')
+            }
         }
     }, []);
     
     
 
     return (
-        <div>
+        <div style={{backgroundColor: chroma(colore).brighten(2.5)}}>
+            <h1>HOME</h1>
             
-            {
-                logged?
-                    <h1>Loggato come: {pb.authStore.model.username}</h1>
-                :
-                    <LogSignPage updateLoggedStatus={updateLoggedStatus}/>
-            }
+            <h1>Loggato come: {pb.authStore.model.username}</h1>
+
+            <p style={{color: adjustColor}}>Ciao</p>
+            <br/>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold pt-5 title" style={{color: adjustColor}}>CosPlaya</h1>
+            <br/>
+            <Button adjustColor={adjustColor}>Ciao</Button>
+            <br/>
+            <Colorful disableAlpha color={colore} onChange={(color) => {setColore(color.hex)}}/>
+
+            <div className="container">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold pt-5 ">Home</h1>
+            </div>
+                    
 
         </div>
     )

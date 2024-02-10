@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -8,6 +8,8 @@ import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/components/ui/use-toast"
 
 import { LoaderIcon } from "lucide-react"
+
+import { useRouter } from 'next/navigation'
 
 
 import Fade from '@mui/material/Fade';
@@ -19,7 +21,8 @@ const pb = new PocketBase('https://cosplaya.pockethost.io');
 
 
 
-export default function LogSignPage({ updateLoggedStatus }) {
+export default function LogSignPage() {
+    const router = useRouter()
 
     const { toast } = useToast()
 
@@ -38,6 +41,12 @@ export default function LogSignPage({ updateLoggedStatus }) {
           [name]: value
         }));
     };
+
+    useEffect(()=>{
+        if(logged){
+            router.push('/')
+        }
+    },[])
     
 
     const cambiaForm = (formScelto) => {
@@ -56,8 +65,8 @@ export default function LogSignPage({ updateLoggedStatus }) {
         setLoading(true)
         try {
             const authData = await pb.collection('users').authWithPassword(formData.email, formData.password);
-            updateLoggedStatus(pb.authStore.isValid);
             setLogged(pb.authStore.isValid)
+            router.push('/')
         }catch(err) {
             toast({
                 title: "Errore nel dati di login",
@@ -79,11 +88,21 @@ export default function LogSignPage({ updateLoggedStatus }) {
             "passwordConfirm": formData.password,
             "name": formData.username
         };
-        const record = await pb.collection('users').create(data);
-        const authData = await pb.collection('users').authWithPassword(formData.email, formData.password);
-        updateLoggedStatus(pb.authStore.isValid);
-        setLogged(pb.authStore.isValid)
-        setLoading(false)
+        try {
+            const record = await pb.collection('users').create(data);        
+            const authData = await pb.collection('users').authWithPassword(formData.email, formData.password);
+            setLogged(pb.authStore.isValid)
+            setLoading(false)
+            router.push('/')
+        }catch (err) {
+            toast({
+                title: "Errore nel dati di registrazione",
+                description: "Usarname già esistente e/o password più corta di 8 caratteri",
+                variant: "destructive"
+            })
+            setLoading(false)
+        }
+        
     };
     
 

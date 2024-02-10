@@ -12,7 +12,7 @@ import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} f
 
 
 
-import { LoaderIcon, Menu } from "lucide-react"
+import { LoaderIcon, Menu, X } from "lucide-react"
 
 
 import Fade from '@mui/material/Fade';
@@ -31,20 +31,32 @@ export default function Navbar() {
 
 
     const [logged, setLogged] = useState(pb.authStore.isValid)
+    const [menuOpen, setMenuOpen] = useState(false)
 
     const [avatar, setAvatar] = useState();
     const updateLog = () => {
         setLogged(pb.authStore.isValid)
+        if(pb.authStore.model){
+            if(pb.authStore.model.avatar) {
+                setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
+            }else{
+                setAvatar('https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png')
+            }
+        }
     }
     useEffect(() => {
         if (pb.authStore.model) {
-            setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
+            if(pb.authStore.model.avatar) {
+                setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
+            }else{
+                setAvatar('https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png')
+            }
         }
     }, [logged]);
 
     const goToMyAccount = () => {
         if(pb.authStore.model){
-            router.push('/account/'+pb.authStore.model.id);
+            router.push('/account/'+pb.authStore.model.username);
         }
     }
     
@@ -56,10 +68,13 @@ export default function Navbar() {
                     <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm pb-5">Cos for Fan & Cos for Player</p>
                 </div>
 				
-                <div className="right-0 fixed pr-4">
-                    <Sheet onOpenChange={updateLog}>
-                        <SheetTrigger><Menu /></SheetTrigger>
+                <div className="right-0 fixed pr-5">
+                    <Sheet open={menuOpen}>
+                        <button onClick={()=>{setMenuOpen(!menuOpen), updateLog()}}><Menu /></button>
                         <SheetContent>
+                            <div className="flex justify-end">
+                                <button onClick={()=>{setMenuOpen(!menuOpen), updateLog()}}><X /></button>
+                            </div>
                             {
                                 logged?
                                     <Card className="flex border-none shadow-none justify-center items-center flex-col">
@@ -75,13 +90,16 @@ export default function Navbar() {
                                         </CardHeader>
 
                                         <CardFooter>
-                                            <Button onClick={()=>goToMyAccount()}>Vai al tuo profilo</Button>
+                                            <Button onClick={()=>{goToMyAccount(), setMenuOpen(!menuOpen)}}>Vai al tuo profilo</Button>
                                         </CardFooter>
 
                                     </Card>
 
                                 :
-                                null
+                                    <div className="flex border-none shadow-none justify-center items-center flex-col">
+                                        <Button onClick={()=>{router.push('/'), setMenuOpen(!menuOpen)}}>Accedi al tuo account</Button>     
+                                    </div>
+        
                             }
                             
                         </SheetContent>

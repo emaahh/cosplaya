@@ -32,14 +32,18 @@ export default function AccountPage({ params }) {
     const logout = () => {
         pb.authStore.clear()
         setLogged(false)
-        router.push('/')
+        router.push('/account/loginregister')
     }
 
     const findAccount = async () => {
-        const record = await pb.collection('users').getFirstListItem(`id="${params.idAccount}"`);
+        const record = await pb.collection('users').getFirstListItem(`username="${params.idAccount}"`);
         if(record){
-            setAccountFound(record)
-            setAvatarProfileNotMine("https://cosplaya.pockethost.io/api/files/users/"+record.id+"/"+record.avatar)
+            setAccountFound(record)   
+            if(record.avatar) {
+                setAvatarProfileNotMine("https://cosplaya.pockethost.io/api/files/users/"+record.id+"/"+record.avatar)
+            }else{
+                setAvatarProfileNotMine('https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png')
+            }
         }
         if(pb.authStore.model && pb.authStore.model.id == record.id){
             setIsMine(true);
@@ -49,11 +53,15 @@ export default function AccountPage({ params }) {
     const [avatar, setAvatar] = useState();
     useEffect(() => {
         if(!logged){
-            router.push('/')
+            router.push('/account/loginregister')
         }
         findAccount()
         if (pb.authStore.model) {
-            setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
+            if(pb.authStore.model.avatar) {
+                setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
+            }else{
+                setAvatar('https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png')
+            }
         }
     }, []);
 
@@ -63,14 +71,22 @@ export default function AccountPage({ params }) {
             setAvatar(e.target.files[0]);
             try {
                 const record = await pb.collection('users').update(pb.authStore.model.id, {avatar: e.target.files[0],});
-                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+pb.authStore.model.id+"/"+pb.authStore.model.avatar)
+                if(pb.authStore.model.avatar) {
+                    setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
+                }else{
+                    setAvatar('https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png')
+                }
             } catch (error) {
                 toast({
                     title: "Errore nel caricamento dell'avatar",
                     description: "Riprova, se il problema persiste assicurati si tratti di un formato supportato e che non superi i 5MB o contattaci",
                     variant: "destructive"
                 })
-                setAvatar("https://cosplaya.pockethost.io/api/files/users/"+pb.authStore.model.id+"/"+pb.authStore.model.avatar)
+                if(pb.authStore.model.avatar) {
+                    setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
+                }else{
+                    setAvatar('https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png')
+                }
             }
         }
     }
