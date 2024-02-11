@@ -23,10 +23,14 @@ export default function Footer() {
     const [versione, setVersione] = useState()
     const [loading, setLoading] = useState(true)
 	const ControlloVersione = async () => {
-		const InfoVersione = await pb.collection('InfoProduzione').getFullList({sort: '-created',});
-        if(InfoVersione){
-            setLoading(false)
-            setVersione(InfoVersione[0].versione)
+        try {
+            const InfoVersione = await pb.collection('InfoProduzione').getFullList({sort: '-created',});
+            if(InfoVersione){
+                setLoading(false)
+                setVersione(InfoVersione[0].versione)
+            }
+        }catch (e) {
+            return
         }
 	}
     useEffect(()=>{

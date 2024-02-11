@@ -12,6 +12,8 @@ import { LoaderIcon } from "lucide-react"
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+
 
 import chroma from "chroma-js"
 import { Colorful } from '@uiw/react-color';
@@ -35,17 +37,9 @@ export default function Home() {
 
     const adjustColor = chroma(colore).luminance() < 0.025? chroma(colore).brighten(4) : chroma(colore).darken()
 
-    const [avatar, setAvatar] = useState();
     useEffect(() => {
         if(!logged){
             router.push('/account/loginregister')
-        }
-        if (pb.authStore.model) {
-            if(pb.authStore.model.avatar) {
-                setAvatar(`https://cosplaya.pockethost.io/api/files/users/${pb.authStore.model.id}/${pb.authStore.model.avatar}`);
-            }else{
-                setAvatar('https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png')
-            }
         }
     }, []);
     
@@ -57,19 +51,7 @@ export default function Home() {
             
             <h1>Loggato come: {pb.authStore.model? pb.authStore.model.username : null}</h1>
 
-            <p style={{color: adjustColor}}>Ciao</p>
-            <br/>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold pt-5 title" style={{color: adjustColor}}>CosPlaya</h1>
-            <br/>
-            <Button adjustColor={adjustColor}>Ciao</Button>
-            <br/>
-            <Colorful disableAlpha color={colore} onChange={(color) => {setColore(color.hex)}}/>
-
-            <div className="container">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold pt-5 ">Home</h1>
-            </div>
-                    
-
+            
         </div>
     )
 }

@@ -12,7 +12,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import PocketBase from 'pocketbase';
 
@@ -21,6 +21,11 @@ const pb = new PocketBase('https://cosplaya.pockethost.io');
 
 export default function AccountPage({ params }) {
     const router = useRouter()
+
+    const inputAvatarRef = useRef(null);
+    const handleUploadAvatarClick = () => {
+        inputAvatarRef.current.click();
+    };
 
     const { toast } = useToast()
 
@@ -107,13 +112,13 @@ export default function AccountPage({ params }) {
                                         isMine?
                                         
                                             <>
-                                                <Avatar className="w-20 h-20 flex items-center aspect-auto">
-                                                    <AvatarImage src={avatar} className="w-auto h-auto aspect-auto"/>
+                                                <Avatar className="w-20 h-20 flex justify-center items-center">
+                                                    <AvatarImage src={avatar} className="object-cover aspect-auto max-w-none"/>
                                                     <AvatarFallback><LoaderIcon className="animate-spin"/></AvatarFallback>
                                                 </Avatar>
-                                                <Button className="border-dashed" variant="outline" adjustColor={'white'}>
-                                                    <input className="hidden" id="file-upload" type="file" onChange={handleAvatarChange}/>
-                                                    <label htmlFor="file-upload" className="inline-flex items-center"><Upload className="p-1"/> Cambia avatar</label>
+                                                <Button className="border-dashed inline-flex items-center" variant="outline" adjustColor={'gray'} onClick={handleUploadAvatarClick}>
+                                                    <input ref={inputAvatarRef} className="hidden" id="file-upload" type="file" onChange={handleAvatarChange}/>
+                                                    <Upload className="p-1"/> Cambia avatar
                                                 </Button>
                                                 
                                                 <br/>

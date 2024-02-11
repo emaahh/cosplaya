@@ -62,7 +62,7 @@ export default function Navbar() {
     
     return (
         <div className="h-28">
-			<div className="inline-flex flex-col fixed items-center align-middle justify-center w-screen">
+			<div className="inline-flex flex-col fixed items-center align-middle justify-center w-screen backdrop-blur z-10">
                 <div className="inline-flex flex-col items-center align-middle">
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold pt-5 " style={{fontFamily:'huglove'}}>CosPlaya</h1>
                     <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm pb-5">Cos for Fan & Cos for Player</p>
@@ -80,8 +80,8 @@ export default function Navbar() {
                                     <Card className="flex border-none shadow-none justify-center items-center flex-col">
                                         <CardHeader className="items-center">
 
-                                            <Avatar className="w-20 h-20 flex items-center aspect-auto">
-                                                <AvatarImage src={avatar} className="w-auto h-auto aspect-auto"/>
+                                            <Avatar className="w-20 h-20 flex justify-center items-center">
+                                                <AvatarImage src={avatar} className="object-cover aspect-auto max-w-none"/>
                                                 <AvatarFallback><LoaderIcon className="animate-spin"/></AvatarFallback>
                                             </Avatar>
                                             
