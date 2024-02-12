@@ -3,14 +3,14 @@ import { useState, useEffect } from "react"
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/Personali/button"
 import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/components/ui/use-toast"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger,} from "@/components/ui/sheet"
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card"
 
-
+import chroma from "chroma-js"
 
 import { LoaderIcon, Menu, X } from "lucide-react"
 
@@ -22,6 +22,7 @@ import { useRouter } from 'next/navigation'
 
 
 import PocketBase from 'pocketbase';
+import { rgb } from "chroma-js"
 const pb = new PocketBase('https://cosplaya.pockethost.io');
 
 
@@ -29,9 +30,11 @@ const pb = new PocketBase('https://cosplaya.pockethost.io');
 export default function Navbar() {
     const router = useRouter()
 
-
     const [logged, setLogged] = useState(pb.authStore.isValid)
+    const [colore, setColore] = useState('white')
     const [menuOpen, setMenuOpen] = useState(false)
+
+    const adjustColor = chroma(colore).luminance() < 0.025? chroma(colore).brighten(4) : chroma(colore).darken()
 
     const [avatar, setAvatar] = useState();
     const updateLog = () => {
@@ -62,7 +65,7 @@ export default function Navbar() {
     
     return (
         <div className="h-28">
-			<div className="inline-flex flex-col fixed items-center align-middle justify-center w-screen backdrop-blur z-10">
+			<div className={`inline-flex flex-col fixed items-center align-middle justify-center w-screen backdrop-blur z-10`} style={{backgroundImage: `linear-gradient(180deg, ${chroma(colore).alpha(0.25)}, transparent)`}}>
                 <div className="inline-flex flex-col items-center align-middle">
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold pt-5 " style={{fontFamily:'huglove'}}>CosPlaya</h1>
                     <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm pb-5">Cos for Fan & Cos for Player</p>

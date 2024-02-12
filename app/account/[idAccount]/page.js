@@ -1,5 +1,5 @@
 "use client"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/Personali/button"
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
@@ -118,7 +118,7 @@ export default function AccountPage({ params }) {
                                                 </Avatar>
                                                 <Button className="border-dashed inline-flex items-center" variant="outline" adjustColor={'gray'} onClick={handleUploadAvatarClick}>
                                                     <input ref={inputAvatarRef} className="hidden" id="file-upload" type="file" onChange={handleAvatarChange}/>
-                                                    <Upload className="p-1"/> Cambia avatar
+                                                    <Upload className="p-1 bg-[transparent!important]"/> Cambia avatar
                                                 </Button>
                                                 
                                                 <br/>
