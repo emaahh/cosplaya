@@ -64,6 +64,9 @@ export default function Home() {
     getPost();
   }, []);
 
+  const isDesktopOrLaptop = useMediaQuery({ query: "(min-width: 1224px)" });
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+
   return (
     <div style={{ backgroundColor: chroma(colore).brighten(2.5) }}>
       <div className="container flex justify-center">
