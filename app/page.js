@@ -38,7 +38,7 @@ export default function Home() {
   const { toast } = useToast();
 
   const [logged, setLogged] = useState(pb.authStore.isValid);
-  const [colore, setColore] = useState("#000");
+  const [colore, setColore] = useState("white");
   const [largeFoto, setLargeFoto] = useState(false);
   const [fullPost, setFullPost] = useState();
 
