@@ -105,6 +105,8 @@ export default function Home() {
         }
       }
       const record = await pb.collection("posts").create(formData);
+      setDescrizione("");
+      setFotoUploaded();
       toast({
         title: "Post caricato correttamente.",
         action: (
