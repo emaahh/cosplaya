@@ -129,7 +129,9 @@ export default function Home() {
     <div style={{ backgroundColor: chroma(colore).brighten(2.5) }}>
       <div className="mx-auto flex max-w-sm translate-y-1/4 flex-col justify-center space-y-6">
         <div className="space-y-2 text-center">
-          <h1 className="text-lg font-bold sm:text-3xl">Cosa c'è di nuovo?</h1>
+          <h1 className="text-lg font-bold sm:text-3xl">
+            Cosa c&apos;è di nuovo?
+          </h1>
         </div>
       </div>
 
