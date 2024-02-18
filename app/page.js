@@ -28,6 +28,8 @@ import PocketBase from "pocketbase";
 
 const pb = new PocketBase("https://cosplaya.pockethost.io");
 
+import Post from "@/components/Personali/postComponent";
+
 export default function Home() {
   const router = useRouter();
 
