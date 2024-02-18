@@ -5,8 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 
-import { Upload } from 'lucide-react';
-import { LoaderIcon } from "lucide-react"
+import { LoaderIcon, Upload } from "lucide-react"
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'

@@ -6,6 +6,8 @@ import { Toaster } from "@/components/ui/toaster"
 
 import Footer from '@/components/Personali/footer'
 import Navbar from '@/components/Personali/navbar'
+import MobileNav from '@/components/Personali/mobileNav'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,13 +26,14 @@ export const viewport = {
 export default function RootLayout({ children }) {
 
 
+
 	return (
 		<html lang="it">
 			<body className={inter.className}>
 				<Navbar/>
 				{children}
 				<Toaster />
-				<Footer/>
+				<MobileNav/>
 			</body>
 		</html>
 	)
