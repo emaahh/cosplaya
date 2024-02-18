@@ -138,8 +138,9 @@ export default function Home() {
           <br />
 
           <div className="grid justify-center">
-            {fullPost?.map((item) => (
+            {fullPost?.map((item, i) => (
               <Post
+                key={i}
                 id={item.id}
                 descrizione={item.descrizione}
                 autore={item.expand.autore}
