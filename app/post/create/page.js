@@ -172,7 +172,7 @@ export default function Home() {
               <CarouselContent>
                 {fotoUploaded &&
                   fotoUploaded.map((foto, i) => (
-                    <CarouselItem className="flex rounded align-middle">
+                    <CarouselItem key={i} className="flex rounded align-middle">
                       <img
                         className=" max-h-[500px] w-full self-center rounded  object-contain"
                         src={URL.createObjectURL(foto)}

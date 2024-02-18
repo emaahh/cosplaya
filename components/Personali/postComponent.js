@@ -121,8 +121,8 @@ export default function Post({ id, foto, descrizione, autore, timestamp }) {
           {foto.length > 0 && (
             <Carousel className="w-[95%] max-w-[550px] sm:w-[80%]">
               <CarouselContent>
-                {foto?.map((item) => (
-                  <CarouselItem className="flex rounded align-middle">
+                {foto?.map((item, i) => (
+                  <CarouselItem key={i} className="flex rounded align-middle">
                     <img
                       className=" max-h-[500px] w-full max-w-[500px] self-center rounded  object-contain"
                       src={
