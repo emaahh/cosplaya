@@ -72,10 +72,12 @@ export default function Home() {
   return (
     <div style={{ backgroundColor: chroma(colore).brighten(2.5) }}>
       <div className="container flex justify-center">
+        <Button onClick={() => router.push("/post/create")}>
+          Cosa c&apos;è di nuovo? Publica qualcosa.
+        </Button>
+      </div>
+      <div className="container flex justify-center">
         <div className="p-2">
-          <h1 className="pt-5 text-2xl font-bold sm:text-3xl md:text-4xl ">
-            Ultimi post
-          </h1>
           <br />
 
           <div className="grid justify-center">

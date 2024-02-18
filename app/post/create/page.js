@@ -225,6 +225,13 @@ export default function Home() {
 
       <br />
       <br />
+
+      <div className="container flex justify-center">
+        <Button onClick={() => router.push("/")}>Torna alla home</Button>
+      </div>
+
+      <br />
+      <br />
     </div>
   );
 }
