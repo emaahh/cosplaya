@@ -22,6 +22,8 @@ import Link from "next/link";
 import chroma from "chroma-js";
 import { Colorful } from "@uiw/react-color";
 
+import { useMediaQuery } from "react-responsive";
+
 import { useState, useEffect } from "react";
 
 import PocketBase from "pocketbase";
