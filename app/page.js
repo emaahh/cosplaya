@@ -97,7 +97,7 @@ export default function Home() {
           <div className="max-w-[360px] p-2">
             <br />
 
-            <Card className="mt-[60px] w-fit overflow-hidden">
+            <Card className="w-fit overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between align-middle">
                 <h4 className="font-bold ">Attività</h4>
               </CardHeader>
