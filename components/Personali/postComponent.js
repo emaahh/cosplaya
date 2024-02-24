@@ -43,6 +43,7 @@ import {
   MessageCircleMore,
   Pin,
   Maximize2,
+  HeartCrack,
 } from "lucide-react";
 
 import Image from "next/image";
@@ -57,7 +58,14 @@ import PocketBase from "pocketbase";
 
 const pb = new PocketBase("https://cosplaya.pockethost.io");
 
-export default function Post({ id, foto, descrizione, autore, timestamp }) {
+export default function Post({
+  id,
+  foto,
+  descrizione,
+  autore,
+  timestamp,
+  like,
+}) {
   const router = useRouter();
 
   const { toast } = useToast();
@@ -65,11 +73,50 @@ export default function Post({ id, foto, descrizione, autore, timestamp }) {
   const [logged, setLogged] = useState(pb.authStore.isValid);
   const [colore, setColore] = useState("#000");
   const [largeFoto, setLargeFoto] = useState(false);
+  const [myLike, setMyLike] = useState(false);
+  const [numeroLike, setNumeroLike] = useState(0);
+  const [loadingLike, setLoadingLike] = useState(false);
 
   const adjustColor =
     chroma(colore).luminance() < 0.025
       ? chroma(colore).brighten(4)
       : chroma(colore).darken();
+
+  const giveLike = async () => {
+    try {
+      if (myLike) {
+        setLoadingLike(true);
+        const post = await pb.collection("posts").update(id, {
+          "like-": pb.authStore.model.id,
+        });
+        setMyLike(!myLike);
+        setNumeroLike(numeroLike - 1);
+        setLoadingLike(false);
+      } else {
+        setLoadingLike(true);
+        const post = await pb.collection("posts").update(id, {
+          "like+": pb.authStore.model.id,
+        });
+        setMyLike(!myLike);
+        setNumeroLike(numeroLike + 1);
+        setLoadingLike(false);
+      }
+    } catch (e) {
+      console.log(e);
+      toast({
+        title: "Impossibile mettere like.",
+        description: "Riprova tra qualche secondo.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  useEffect(() => {
+    setNumeroLike(like.length);
+    if (like.indexOf(pb.authStore.model.id) !== -1) {
+      setMyLike(true);
+    }
+  }, [like]);
 
   return (
     <>
@@ -87,7 +134,7 @@ export default function Post({ id, foto, descrizione, autore, timestamp }) {
         </DialogContent>
       </Dialog>
 
-      <Card className="mb-5  overflow-hidden">
+      <Card className="mb-5 max-w-screen-sm overflow-hidden">
         <CardHeader className="flex flex-row items-center justify-between align-middle">
           <div className="inline-flex flex-row items-center">
             <Avatar className="z-0 mr-2 flex items-center justify-center">
@@ -114,11 +161,11 @@ export default function Post({ id, foto, descrizione, autore, timestamp }) {
           </div>
 
           <CardDescription className="italic opacity-50">
-            {timestamp}
+            {timestamp?.split(" ")[0].replaceAll("-", "/")}
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex justify-center">
-          {foto.length > 0 && (
+        {foto.length > 0 && (
+          <CardContent className="flex justify-center">
             <Carousel className="w-[95%] max-w-[550px] sm:w-[80%]">
               <CarouselContent>
                 {foto?.map((item, i) => (
@@ -135,8 +182,13 @@ export default function Post({ id, foto, descrizione, autore, timestamp }) {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="hidden sm:flex" />
-              <CarouselNext className="hidden sm:flex" />
+              {foto?.length > 1 && (
+                <>
+                  <CarouselPrevious className="hidden sm:flex" />
+                  <CarouselNext className="hidden sm:flex" />
+                </>
+              )}
+
               <div className="absolute bottom-5 flex w-full items-center justify-center">
                 <Button
                   adjustColor="rgb(100, 116, 139)"
@@ -147,15 +199,31 @@ export default function Post({ id, foto, descrizione, autore, timestamp }) {
                 </Button>
               </div>
             </Carousel>
-          )}
-        </CardContent>
+          </CardContent>
+        )}
+
         <CardContent className="inline-flex flex-row align-middle">
-          <Heart className="mr-3" />
-          <MessageCircleMore className="mr-3" />
-          <Pin className="mr-3" />
+          <p className="text-justify text-xs sm:text-sm">{descrizione}</p>
         </CardContent>
         <CardFooter className=" max-w-screen-sm">
-          <p className="text-justify text-xs sm:text-sm">{descrizione}</p>
+          {myLike ? (
+            <Heart
+              color="#ff0000"
+              fill="#ff0000"
+              className="mr-1"
+              onClick={() => giveLike()}
+            />
+          ) : (
+            <Heart className="mr-1" onClick={() => giveLike()} />
+          )}
+          {loadingLike ? (
+            <LoaderIcon className="mr-3 animate-spin" />
+          ) : (
+            <p className="mr-3 pr-1 italic opacity-50">{numeroLike}</p>
+          )}
+
+          <MessageCircleMore className="mr-3" />
+          <Pin className="mr-3" />
         </CardFooter>
       </Card>
     </>

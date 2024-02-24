@@ -26,6 +26,8 @@ import { useMediaQuery } from "react-responsive";
 
 import { useState, useEffect } from "react";
 
+import InfiniteScroll from "react-infinite-scroll-component";
+
 import PocketBase from "pocketbase";
 
 const pb = new PocketBase("https://cosplaya.pockethost.io");
@@ -41,6 +43,8 @@ export default function Home() {
   const [colore, setColore] = useState("white");
   const [largeFoto, setLargeFoto] = useState(false);
   const [fullPost, setFullPost] = useState();
+  const [hasMore, setHasMore] = useState(true);
+  const [index, setIndex] = useState(2);
 
   const adjustColor =
     chroma(colore).luminance() < 0.025
@@ -49,16 +53,28 @@ export default function Home() {
 
   const getPost = async () => {
     try {
-      const records = await pb.collection("posts").getFullList({
+      const records = await pb.collection("posts").getList(1, 5, {
         sort: "-created",
-        expand: "autore",
+        expand: "autore,like",
       });
-      setFullPost(records);
+      setFullPost(records.items);
     } catch (e) {
       console.log(e);
     }
   };
-
+  const fetchMoreData = async () => {
+    try {
+      const records = await pb.collection("posts").getList(index, 5, {
+        sort: "-created",
+        expand: "autore,like",
+      });
+      setFullPost((fullPost) => [...fullPost, ...records.items]);
+      setIndex((prevIndex) => prevIndex + 1);
+      records.items.length > 0 ? setHasMore(true) : setHasMore(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   useEffect(() => {
     if (!logged) {
       router.push("/account/loginregister");
@@ -81,16 +97,40 @@ export default function Home() {
           <br />
 
           <div className="grid justify-center">
-            {fullPost?.map((item, i) => (
-              <Post
-                key={i}
-                id={item.id}
-                descrizione={item.descrizione}
-                autore={item.expand.autore}
-                foto={item.fotos}
-                timestamp={item.created}
-              />
-            ))}
+            {fullPost && (
+              <InfiniteScroll
+                pullDownToRefresh={false}
+                style={{ overflow: "hidden!important" }}
+                scrollableTarget="#body"
+                dataLength={fullPost.length} //This is important field to render the next data
+                next={fetchMoreData}
+                hasMore={hasMore}
+                loader={
+                  <div className="container flex justify-center">
+                    <LoaderIcon className="animate-spin" />
+                  </div>
+                }
+                endMessage={
+                  <div className="container flex justify-center">
+                    <p className="opacity-3">
+                      WOW, hai visto tutto per adesso!
+                    </p>
+                  </div>
+                }
+              >
+                {fullPost?.map((item, i) => (
+                  <Post
+                    key={i}
+                    id={item.id}
+                    descrizione={item.descrizione}
+                    autore={item.expand.autore}
+                    like={item.like}
+                    foto={item.fotos}
+                    timestamp={item.created}
+                  />
+                ))}
+              </InfiniteScroll>
+            )}
           </div>
         </div>
         {isDesktopOrLaptop && (
