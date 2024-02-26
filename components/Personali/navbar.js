@@ -107,12 +107,14 @@ export default function Navbar() {
         }}
       >
         <div className="inline-flex flex-col items-center align-middle">
-          <h1
-            className="pt-5 text-3xl font-bold sm:text-4xl md:text-5xl "
-            style={{ fontFamily: "huglove" }}
-          >
-            CosPlaya
-          </h1>
+          <Link href={"/"}>
+            <h1
+              className="pt-5 text-3xl font-bold sm:text-4xl md:text-5xl "
+              style={{ fontFamily: "huglove" }}
+            >
+              CosPlaya
+            </h1>
+          </Link>
           <p
             className={`pb-5 text-xs text-gray-500 transition-all ease-in sm:text-sm dark:text-gray-400 ${show && "opacity-0"}`}
           >

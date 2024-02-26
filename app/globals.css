@@ -87,3 +87,14 @@
 .lucide {
     background-color: transparent !important;
 }
+
+.ql-toolbar {
+    border-radius: 15px;
+}
+.ql-container {
+    border-radius: 15px;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    margin-top: -10px !important;
+    padding-top: 10px !important;
+}

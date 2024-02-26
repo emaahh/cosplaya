@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/Personali/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Card,
   CardContent,
@@ -8,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -17,7 +17,30 @@ import { LoaderIcon, Upload } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import ReactHtmlParser, {
+  convertNodeToElement,
+  htmlparser2,
+  processNodes,
+} from "react-html-parser";
+
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+const toolbarOptions = [
+  ["bold", "italic", "underline", "strike"], // toggled buttons
+  ["blockquote"],
+  ["link"],
+  [{ list: "ordered" }, { list: "bullet" }, { list: "check" }], // superscript/subscript
+
+  [{ size: ["small", false, "large"] }], // custom dropdown
+
+  [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+  [{ font: [] }],
+  [{ align: [] }],
+
+  ["clean"], // remove formatting button
+];
 
 import PocketBase from "pocketbase";
 
@@ -37,6 +60,9 @@ export default function AccountPage({ params }) {
   const [accountFound, setAccountFound] = useState();
   const [isMine, setIsMine] = useState(false);
   const [avatarProfileNotMine, setAvatarProfileNotMine] = useState();
+  const [valueBioEditor, setValueBioEditor] = useState("");
+
+  const id = "my-unique-id";
 
   const logout = () => {
     pb.authStore.clear();
@@ -44,26 +70,30 @@ export default function AccountPage({ params }) {
   };
 
   const findAccount = async () => {
-    const record = await pb
-      .collection("users")
-      .getFirstListItem(`username="${params.idAccount}"`);
-    if (record) {
-      setAccountFound(record);
-      if (record.avatar) {
-        setAvatarProfileNotMine(
-          "https://cosplaya.pockethost.io/api/files/users/" +
-            record.id +
-            "/" +
-            record.avatar,
-        );
-      } else {
-        setAvatarProfileNotMine(
-          "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png",
-        );
+    try {
+      const record = await pb
+        .collection("users")
+        .getFirstListItem(`username="${params.idAccount}"`);
+      if (record) {
+        setAccountFound(record);
+        if (record.avatar) {
+          setAvatarProfileNotMine(
+            "https://cosplaya.pockethost.io/api/files/users/" +
+              record.id +
+              "/" +
+              record.avatar,
+          );
+        } else {
+          setAvatarProfileNotMine(
+            "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png",
+          );
+        }
       }
-    }
-    if (pb.authStore.model && pb.authStore.model.id == record.id) {
-      setIsMine(true);
+      if (pb.authStore.model && pb.authStore.model.id == record.id) {
+        setIsMine(true);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -73,6 +103,7 @@ export default function AccountPage({ params }) {
       router.push("/account/loginregister");
     }
     findAccount();
+
     if (pb.authStore.model) {
       if (pb.authStore.model.avatar) {
         setAvatar(
@@ -84,6 +115,7 @@ export default function AccountPage({ params }) {
         );
       }
     }
+    setValueBioEditor(pb.authStore.model ? pb.authStore.model.bio : "");
   }, []);
 
   const handleAvatarChange = async (e) => {
@@ -187,8 +219,21 @@ export default function AccountPage({ params }) {
               </CardDescription>
             ) : null}
           </CardHeader>
-          <CardContent>
-            <p>contenuti boh da aggiungere</p>
+          <CardContent className="max-w-xl lg:w-1/2">
+            {isMine ? (
+              <ReactQuill
+                theme="snow"
+                value={valueBioEditor}
+                onChange={setValueBioEditor}
+                modules={{ toolbar: toolbarOptions }}
+                placeholder="Modifica qui la tua bio!"
+              />
+            ) : null}
+            <CardDescription>
+              {accountFound?.bio
+                ? ReactHtmlParser(accountFound.bio)
+                : "Nessuna bio..."}
+            </CardDescription>
           </CardContent>
           {isMine ? (
             <CardFooter>

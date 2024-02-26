@@ -92,8 +92,8 @@ export default function Home() {
           Cosa c&apos;è di nuovo? Publica qualcosa.
         </Button>
       </div>
-      <div className="container flex justify-center">
-        <div className="p-2">
+      <div className="flex justify-center sm:container">
+        <div className="pt-2">
           <br />
 
           <div className="grid justify-center">
@@ -132,7 +132,15 @@ export default function Home() {
               </InfiniteScroll>
             )}
           </div>
+
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
         </div>
+
         {isDesktopOrLaptop && (
           <div className="max-w-[360px] p-2">
             <br />
@@ -152,7 +160,7 @@ export default function Home() {
                       <LoaderIcon className="animate-spin" />
                     </AvatarFallback>
                   </Avatar>
-                  <p>
+                  <p className=" text-xs sm:text-sm">
                     <span className="text-sky-600 underline">
                       @liltoxicpain
                     </span>{" "}
@@ -170,7 +178,7 @@ export default function Home() {
                       <LoaderIcon className="animate-spin" />
                     </AvatarFallback>
                   </Avatar>
-                  <p>
+                  <p className=" text-xs sm:text-sm">
                     <span className="text-sky-600 underline">@emaahh</span> ha
                     appena messo mi piace ad un post di{" "}
                     <span className="text-sky-600 underline">@Giovixx</span>
